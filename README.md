@@ -7,6 +7,6 @@ Unity-NodeJS-Game-Redux: This folder contains an updated version of his original
 Additional documents outline the installation process. (see UN_JS_Game_Install.rtf) A client, Builds\test001.exe, has also been provide for Windows 10 OS machines.   
    
 Unity-NodeJS-Game-Min: This folder will contain a minimum version of the Client. It will contain only the code needed to run a simple Client. Documentation will be add 
-to explain the modules and scripts used by the Client to add others in enhancing the Client example for developing their own game.   
+to explain the modules and scripts used by the Client to aid others in enhancing the Client example for developing their own game.   
    
 Unity-NodeJS-Game-GUI: This folder will contain enhancements to the minimum Client.   
