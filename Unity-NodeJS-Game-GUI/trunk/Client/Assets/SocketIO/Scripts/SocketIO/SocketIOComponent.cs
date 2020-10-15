@@ -99,7 +99,8 @@ namespace SocketIO
 			sid = null;
 			packetId = 0;
 
-			ws = new WebSocket(url);
+            // Get url from static string in Login.
+			ws = new WebSocket("ws://" + Login.IPaddr + ":3000/socket.io/?EIO=4&transport=websocket");
 			ws.OnOpen += OnOpen;
 			ws.OnMessage += OnMessage;
 			ws.OnError += OnError;
@@ -167,7 +168,7 @@ namespace SocketIO
 		#endregion
 
 		#region Public Interface
-		
+
 		public void Connect()
 		{
 			connected = true;
