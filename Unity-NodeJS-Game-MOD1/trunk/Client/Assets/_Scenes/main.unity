@@ -543,7 +543,6 @@ MonoBehaviour:
   networkPlayer: {fileID: 155874, guid: 5f028764a9b1a5744940e5d4e77cbb1e, type: 3}
   currentPlayer: {fileID: 726741346}
   socket: {fileID: 1591667988}
-  nameBox: {fileID: 1979620752}
 --- !u!4 &1314177358
 Transform:
   m_ObjectHideFlags: 0
@@ -688,6 +687,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentPlayer: {fileID: 726741346}
   spawner: {fileID: 1314177357}
+  nameBox: {fileID: 1979620752}
 --- !u!1 &1874975730
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,7 +14,6 @@ public class Spawner : MonoBehaviour
     private Dictionary<string, GameObject> players = new Dictionary<string, GameObject>();
 
     private GameObject namePlate;
-    public Text nameBox;
 
     public GameObject SpawnPlayer(string id)
     {
@@ -49,7 +48,6 @@ public class Spawner : MonoBehaviour
             textMesh.color = Color.white;
             textMesh.text = id;     // Set the name text to the network id string.
             // Set UI name also
-            nameBox.text = id;
             // Change the color of the Avatar based on Login.skinColor.
             textMesh.color = Login.skinColor;       // try this first. Change namePlate color. works.
         }

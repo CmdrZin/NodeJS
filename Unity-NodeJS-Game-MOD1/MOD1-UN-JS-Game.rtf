@@ -3,7 +3,7 @@
 {\*\generator Riched20 10.0.19041}\viewkind4\uc1 
 \pard\sl240\slmult1\f0\fs22\lang9 MOD1-UN-JS-Game.rtf\par
 15oct20 ndp\par
-18oct20\par
+19oct20\par
 \par
 Unity NodeJS Game with Modifications\par
 \par
@@ -148,6 +148,19 @@ main->Floor->ClickToMove:OnClick() ->Navigator:NavigateTo() set destination for 
 handled in Update(), ->Network:Move() generate a JSONObject with position date and send in 'move' message.\par
 \par
 \tab 1. Server recieves a 'move' message Event. (see above)\par
+\par
+19oct20\par
+Bug Fix. Name of last added Player shows in MainUI>Name text box. Should be this Player. Text is controlled \par
+by Spawner script and is set each time AddPlayer is called, but AddPlayer is also called for each spawn, which is \par
+why the last spawn shows up in the text box. Should be controlled by Network and set when a 'register' Event occurs. \par
+MOD: Spawner..remove public Text nameBox. AddPlayer()..remove code setting UI name.\par
+MOD: Network..add public Text nameBox. OnRegister()..add code setting UI name.\par
+Drag MainUI>Name object to Network public Text to link it. Build...start server and test..ok, fixed.\par
+Bug Fix. Panel for radio button is not anchored correctly. Sizes with window changes.\par
+Panel_Background->Rect Transform change from stretch to middle center anchoring...fixed..\par
+TODO: Minor Bug. NamePlate color is not sent to the other Clients. Need to add it to 'spawn' message.\par
+\par
+\par
 \par
 \par
 \par

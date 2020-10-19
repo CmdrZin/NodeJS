@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using SocketIO;
+using UnityEngine.UI; // Required when Using UI elements.
 
 public class Network : MonoBehaviour
 {
-
     static SocketIOComponent socket;
     public GameObject currentPlayer;
     public Spawner spawner;
+
+    public Text nameBox;
+
     // Use this for initialization
     void Start()
     {
@@ -36,8 +39,9 @@ public class Network : MonoBehaviour
         Debug.Log("registered id = " + obj.data);
         spawner.AddPlayer(obj.data["id"].str, currentPlayer);
 		currentPlayer.GetComponent<NetworkEntity> ().id = obj.data ["id"].str;
+        nameBox.text = obj.data["id"].str;
     }
-    
+
     private void OnSpawn(SocketIOEvent obj)
     {
 
