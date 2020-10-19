@@ -9,4 +9,6 @@ Additional documents outline the installation process. (see UN_JS_Game_Install.r
 Unity-NodeJS-Game-Min: This folder will contain a minimum version of the Client. It will contain only the code needed to run a simple Client. Documentation will be added 
 to explain the modules and scripts used by the Client to aid others in enhancing the Client example for developing their own game.   
    
-Unity-NodeJS-Game-GUI: This folder will contain enhancements to the minimum Client.   
+Unity-NodeJS-Game-GUI: This folder contains a simple UI enhancement to the minimum Client.   
+
+Unity-NodeJS-Game-MOD1: This folder contains more UI enhancements and comments on the the network message flow between the Server and the Client.  

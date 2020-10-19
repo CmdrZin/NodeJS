@@ -1,0 +1,155 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Calibri;}{\f1\fnil\fcharset0 Courier New;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\sl240\slmult1\f0\fs22\lang9 MOD1-UN-JS-Game.rtf\par
+15oct20 ndp\par
+18oct20\par
+\par
+Unity NodeJS Game with Modifications\par
+\par
+ref1: C:\\Data\\Software\\Game Development\\Unity-NodeJS-Game-MOD1 - Work folder\par
+ref2: UN_JS_Game_Install.rtf\par
+ref3: Min-UN-JS-Game.rtf\par
+ref4: {{\field{\*\fldinst{HYPERLINK https://learn.unity.com/tutorial/creating-a-screen-space-overlay-ui# }}{\fldrslt{https://learn.unity.com/tutorial/creating-a-screen-space-overlay-ui#\ul0\cf0}}}}\f0\fs22  - Creating an Overlay UI.\par
+ref5: GUI-UN-JS-Game.rtf\par
+\par
+Structure\par
+(see GUI-UN-JS-Game.rtf)\par
+First, copy UN-JS-Game-GUI directory to bring in code and notes, then rename it UN-JS-Game-MOD1.\par
+NOTE: Socket.IO has been adde to the server.js folder.\par
+Import project into SVN (without Unity Library folder)\par
+Start server[2] and run Client in 2019.4.12f1 to check that everything still works..ok..\par
+\par
+
+\pard\f1\lang1033 MODs:\par
+1. Login screen to set Host IP address. No format checking. Replaces 127.0.0.1   \par
+2. Login screen allow Player to set their name.   \par
+3. Login screen allow Player to pick a color.   \par
+
+\pard\sl240\slmult1\f0\lang9\par
+Rename Canvas to CanvasUI. Add Text to show format of IP value. CanvasUI->UI->Text. Position below InputIP box.\par
+Try adding a Material. nope.\par
+Add a Script Component to Text to set the background color of the Text box. Move script into _Scripts folder.\par
+Create a new Material in the Materials folder. hmm..may need to add a Panel for the text to render on.\par
+CanvasUI->UI->Panel. Use Rect Tool to size to TextBox. Move TextBox to be Child of Panel. Set Panel->Image->\par
+Source Image to None. Set Panel->Image->Color to white. No script needed. Delete it.\par
+Add a Connect to Server Button and use it to enter game. CanvasUI->UI->Button. Position in lower screen area.\par
+Create a Script for the Button to switch scenes OnClick()..Make a JoinGame() function for Login.s that calls the  LoadScene("main") operation.\par
+Add the CanvasUI object (which has Login.cs as a Script component) as the Button->On Click () link, then select \par
+the JoinGame() function which is in the MainUI script attached to it. The function will get called when the Button \par
+is clicked. Ok, works.\par
+16oct20\par
+Removed Library to copy. Open Unity so it downloads them, close, then reopen..ok now.\par
+Cleanup: Change names of conponents to be more descriptive.\par
+Adding a Radio Button set to select the material color of the Bear Avatar.\par
+CanvasUI->UI->Toggle. Rename Toggle_Default.  \par
+CanvasUI->UI->Toggle. Rename Toggle_Blue. \par
+CanvasUI->UI->Toggle. Rename Toggle_White. \par
+CanvasUI->UI->Toggle. Rename Toggle_Green. \par
+Create an Empty GameObject and attach a Toggle Group component to it.\par
+Login->GameObject->Create Empty. Rename ColorGroup. ColorGroup->Add Component->UI->Toggle Group.\par
+Drag ColorGroup object into the Toggle:Group for each Toggle to make them act as a group. Run it..ok.\par
+17oct20\par
+Toggle_Default:Toggle:is On = checked..makes this the default selection. Move all the Toggles into the \par
+Panel_Background object for better visability. Add a Text box as a label "Pick your color".\par
+Panel_Background->UI->Text. Rename Text_ColorPick.\par
+May have to make three new matirials if I can't just change the color.\par
+As with the IP, make a SetSkinColor() function in Login.cs then drag the CanvasUI to the On Value Changed list \par
+for each Toggle. Have them call the SetSkinColor() function. Can it pass a parameter? (int color)..yes..try \par
+(Color color)..no..so map int to Color in function..0=default, 1=Blue, 2=White, 3=Green..ok. Now change \par
+Spawner:AddPlayer() to use the static public skinColor varable to adjust the color of the Avatar.\par
+Side note: change Login:SetHostIP to default to 127.0.0.1 is text is null. Ok, SocketIOComponent really needs \par
+a valid IP format check. Someday.\par
+Hmm, looking at the CurrentPlayer:Teddy_Bear object, seems will have to replace the Shader to change the \par
+color..Make three copies of the Assets > Mecanim Warrior Anim Free > Proxy > Materials > TeddyBear_color \par
+Shadder and place them in the Assets > Materials folder. hmm, no copy. only imports..ok, in Assets>Materials \par
+Create->Shader->Standard Surface Shader. Rename to TestColor. nope..move TextBoxes material into \par
+Teddy_Bear > Skinned Mesh Render > Materials > Element 0 to replace TeddyBear_color..ok, this changes base \par
+color but wipes out all the texture. Think I'll just leave this as a namePlate color changer. Still need to get the \par
+color to the other Clients. Need to map the Network connection operation.\par
+Network Messaging: Client Connect\par
+Network:Start() - Set up socketIO to listen for messages.\par
+SocketIO->Scripts->SocketIO->SocketIOComponent - This controls the socketIO operations.\par
+\tab Awake() is called one time and sets up all the tools needed for network operations.\par
+\tab Start() is then executed to invoke Connect() to connect to the network.\par
+NOTE: This is all handled by Unity when the scene is loaded, these are only called once.\par
+Connect() establishes a socketThread and a pingThread (not used). This is where the Server and Client \par
+interaction anaylsis shows how the system works.\par
+18oct20\par
+\b Start Up\b0\par
+\tab CLIENT\tab\tab\tab\tab\tab\tab\tab\tab\tab SERVER\par
+
+\pard\sl240\slmult1\tx4680\tab 0. Server starts up to listen on PORT\par
+server.js:Listen for socket connection on PORT 3000. Process with io.on('connection', ...)\par
+\par
+1. Client connects to the network\par
+main:Network:Start():socket->SocketIOComponent->SocketIO->Scripts->SocketIOComponent:Awake(),\par
+Start(), Connect(), RunSocketThread\par
+main:Network:Start(): Set up handlers for 'open', 'register', 'spawn', 'move', 'follow', 'requestPosition', \par
+'updatePosition', 'attack', and 'disconnected' message Events.\par
+\par
+\tab 2. Server receives socket connect event\par
+server.js:io.on()\par
+Generate Player ID. Generate Player data struct. Add Player to player list.\par
+Send a 'register' message to the Player to give it it's ID.\par
+\par
+3. Client receives a 'register' message Event\par
+Network:OnRegistered()->Spawner:AddPlayer() to add new Player data, set Player ID.\par
+\par
+\tab 4. Server sends broadcasts to spawn new Player\par
+Broadcast a 'spawn' message to all other Players to spawn a new Player with this Player's ID.\par
+\par
+5. Other Clients receive a 'spawn' message Event.\par
+Network:OnSpawn()->Spawner:SpawnPlayer() to instantiate a new GameObject for the new Player and \par
+add the Player to the player list.\par
+If the message contained position data, move the new Player to that position.\par
+\par
+\tab 6. Server broadcasts to request position data\par
+Broadcast a 'requestPosition' message to get the location of the all the Players.\par
+\par
+7. Other Clients receive a 'requestPosition' message Event\par
+Network:OnRequestPosition() send an 'updatePosition' message to tell the Server this Player's position.\par
+\par
+\tab 8. Sends a 'spawn' message to this Player to spawn all \par
+\tab     other Players.\par
+\par
+9. Client receives multiple 'spawn' message Events to generate an avatar for each of the other Players.\par
+For each one, Network:OnSpawn() -> Spawner:SpawnPlayer() to instantiate a new GameObject for a Player \par
+and add that Player to the player list.\par
+\par
+\tab 10. Set up message Event handlers\par
+Set up socket message handlers for 'move', 'follow', updatePosition', 'attack', and 'disconnect' messages.\par
+\par
+\b Server Socket Messages\b0\par
+
+\pard\sl240\slmult1\tab CLIENT\tab\tab\tab\tab\tab\tab\tab\tab\tab SERVER\par
+
+\pard\sl240\slmult1\tx4680\tab 0. Server recieves a 'move' message Event.\par
+server.js:socket.on('move', ...) Using this Client's socket, update its Player position using playerId and x,y.\par
+Broadcast 'move' for this Player to all Clients so they can update the position of their copy of the Player.\par
+\par
+1. Client receives a 'move' message Event.\par
+Network:OnMove() -> Navigator:NavigateTo() set destination for agent. Movement is handled in Update().\par
+\par
+\tab 0. Server recieves a 'follow'  message Event.\par
+\par
+\tab 0. Server recieves an 'updatePosition'  message Event.\par
+\par
+\tab 0. Server recieves an 'attack'  message Event.\par
+\par
+\tab 0. Server recieves a 'disconnect'  message Event. \par
+\par
+\b Client Socket Messages\b0\par
+
+\pard\sl240\slmult1\tab CLIENT\tab\tab\tab\tab\tab\tab\tab\tab\tab SERVER\par
+
+\pard\sl240\slmult1\tx4680 0. Player uses click to move avatar.\par
+main->Floor->ClickToMove:OnClick() ->Navigator:NavigateTo() set destination for agent. Movement is \par
+handled in Update(), ->Network:Move() generate a JSONObject with position date and send in 'move' message.\par
+\par
+\tab 1. Server recieves a 'move' message Event. (see above)\par
+\par
+\par
+\par
+}
+ 

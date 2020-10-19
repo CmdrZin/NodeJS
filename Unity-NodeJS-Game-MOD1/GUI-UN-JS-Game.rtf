@@ -1,0 +1,120 @@
+{\rtf1\ansi\ansicpg1252\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+{\colortbl ;\red0\green0\blue255;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\sl240\slmult1\f0\fs22\lang9 GUI-UN-JS-Game.rtf\par
+10oct20 ndp\par
+14oct20\par
+\par
+Unity NodeJS Game with GUI\par
+\par
+ref1: C:\\Data\\Software\\Game Development\\Unity-NodeJS-Game-GUI - Work folder\par
+ref2: UN_JS_Game_Install.rtf\par
+ref3: Min-UN-JS-Game.rtf\par
+ref4: {{\field{\*\fldinst{HYPERLINK https://learn.unity.com/tutorial/creating-a-screen-space-overlay-ui# }}{\fldrslt{https://learn.unity.com/tutorial/creating-a-screen-space-overlay-ui#\ul0\cf0}}}}\f0\fs22  - Creating an Overlay UI.\par
+\par
+Structure\par
+(see Min-UN-JS-Game.rtf)\par
+First, bring in original code and my notes.\par
+NOTE: Socket.IO has been adde to the server.js folder.\par
+Import project into SVN (without Unity Library folder and other Unity temp or runtime folders)\par
+Start server[2] and run Client in 2017.1.1f1..ok..\par
+1. Try to add name using CurrentPlayer->Add Component->Text Mesh\par
+Set Font to Ariel..Font Size: 30.no control over positioning\par
+2. Select CurrentPlayer and then GameObject-> Create Empty Child..now we have a Transform. Set Y=1.3 so above head.\par
+3. Change name from GameObject to PlayerName..Add Component->Text Mesh..Set Text: NAME to see where it shows up.\par
+Anchor: Middle Center, Font: Arial, Alignment: Center, Character Size: 0.2, Font Size: 10, Transform: Rotation Y: 180..\par
+Run it..ok, looks good..per[3], player is instantiated by Network call to Spawner::SpawnPlayer().\par
+Drag this PlayerName object into the Assets->Prefab area. Then delete it from the Main scene.\par
+Add a public var called namePlate to link the PlayerName prefab..hmm\par
+Put nemePlate back under CurrentPlayer then drag CurrentPlayer into Prefab area..delete seperate namePlate prefab.\par
+Rename as NetworkPlayerA. Fix name in Main scene back to CurrentPlayer. hmm..move code to AddPlayer()..blah\par
+Combine with CurrentPlayer, drag to Prefab and rename CurrentPlayerNet. Network and Spawner both update \par
+they're CurrentPlayer entries to CurrentPlayerNet..try this...sort of..save code from Spawner::AddPlayer()..restore scene.\par
+Ok, do it directly in the script. Make a GameObject (creates a Transform) and add a TextMesh component (the Mesh \par
+Rederer come along for free) then set all the pieces of the TextMesh. Then set the player object as its parent.\par
+Remote works, but not base client..try moving code into AddPlayer() and Build..WOO HOO..all working now.\par
+11oct20\par
+Going Remote\par
+All this is good, but useless if you can't have a remote Server for Clients to connect to.\par
+1. Use the Host IP instead of 127.0.0.1\par
+\tab 192.168.0.2\par
+\tab MOD: Network:Socket IO Component (Script):Url=ws://192.168.0.2:3000/socket.io/?EIO=4&transport=websocket\par
+\tab MOD: server.js::no mods??..nope\par
+2. Hard code the Client to use this IP.\par
+\tab Done.\par
+3. Run multiple Client builds on the Host computer to verify that nothing broke.\par
+\tab Works.\par
+4. Run a Client build on a computer other than the Host to verify remote connection works.\par
+\tab Works. Local Client still works (127.0.0.1) on Host.\par
+So, Remote Client can connect from a WiFi PC and both Local Client and Remote Client work on the Host.\par
+No changes needed to the server code.\par
+Next up. Client GUI to set Server IP, Player name, Bear color, Different Avitar models, Show HP status, etc.\par
+Undo MOD to Client Network Url..commit.\par
+12oct20\par
+Before starting to add a GUI, I'm going to try to update the Unity build version.\par
+Update to 2017.4.32f1 using Download Assistant for Windows. Reimport. Update to 2017.4.40f1.\par
+Reimport. Run server. Run Client..ok.\par
+Update to 2018.4.28f1 (LTS). Reimport. Hmm. Multiple precompile VS errors. Try anyway. Client still runs. Close and reopen.\par
+Hmm..no errors. Run Client..ok..Update to 2019.4.12f1 (LTS). Reimport, use Database ver 2. Run Client..hmm\par
+SreenClicker script has errors. "Component GUI Layer is no longer available." hmm..close and reopen Unity.\par
+No errors now. Client runs..ok..do a build..run client.exe .. Client runs..change settings to Windowed.\par
+Build Settings->Player Settings->Player->Resolution and Presentation>Fullscreen Mode:Windowed, 1024x768.\par
+Build again..Default name is Client.exe in the selected folder..Client runs as .exe and in Unity Editor..same sync issues.\par
+To get rid of error, add TextMesh to Main Camera and save scene. Close and reopen Unity. \par
+Remove TextMesh and Mesh Renderer that was also added. Also WIndow->Layouts->Default. Save scene, save project.\par
+Exit and reopen. Start server, run Client in Unity..ok..build a Client.exe and run it..ok..Close Unity and commit project.\par
+\par
+NOTE: Since I'm not versioning the Library, it will be loaded when you open Client project in Unity the first time.\par
+Just close and reopen Unity again after it builds its Library database.\par
+13oct20\par
+Open in 2019.4.12 on Saturn. Save project, scene, then close and reopen. Window->Layouts->Default. Save Project. \par
+Close and reopen. Warnings gone. Save Project. Close and reopen. OK, gtg.\par
+Reposition Main Camera for a better view. Ok. Run Server and Client...hmm. Little bug. If Client is started before \par
+Server is up, the namePlate x,y,z is at the origin and NOT with the Avatar. It then keeps this reletive position \par
+as the Avatar moves. \par
+FIX: Get the Avatar x,y,z transform and ADD the y offset and y rotation to it to generate the namePlate transform.\par
+MOD: Spawner::AddPlayer() ..OK, fixed. Reformatting files as I go to use 4 spaces for tabs. (VS options for C# and Text).\par
+Tasks:\tab 1. Logon screen. Enter Host IP address. User name. Avatar color. Avatar type.\par
+\tab      Go to Main scene. Hide Logon, Show Game UI.\par
+\tab 2. Run Main scene.\par
+[4] Make a Screen Space UI. Open Project. With main scene selected, RMB in a blank area of the Hierarchy then \par
+UI > Canvas. Switch Scene to 2D mode.\par
+Canvas->Canvas Scaler->UI Scale Mode: Scale with Screen Size, ->Match: 0.5 \par
+Change name of Canvas to MainUI. MainUI->Canvas->Render Mode: Screen - Camera, \par
+\tab Render Camera: Main Camera (Camera), ->Plane Distance: 10 and adjust the view to show playing field.\par
+RMC MainUI->UI->Text (or use Add Component). Change Text color to White and move to upper right. OK, when \par
+run, Client shows text in upper right. Change name to Name. \par
+RMC MainUI->UI->Input Field. Drag it to upper left. Change name to InputIP.\par
+Bacn to MainUI. Add component-> New Script: MainUI. Move this file to _Scripts. Open to edit it.\par
+Add a callback for the InputField.\par
+TODO: Need to add a function in Network:Socket IO Component (Script) to change the Url string or directly change it.\par
+Try, MOD: MainUI.cs..add a public Script..nah..add public setIP() in SocketIOComponent script.\par
+MOD: SocketIOComponent..add setIP(string ip) to Public Interface region..add Network (Main scene opject) to \par
+public Network in Inspector. hmm..add call to Connect()..nope..call Awake() and Start(). No nameplate though.\par
+Ok, need a login scene that calls Main scene. Set Url with Host IP then call Main scene.\par
+RMB _Scenes->Create->Scene: Name=Login. Save scene. RBM->UI->Canvas to add UI to Login scene. Switch to 2D view.\par
+Canvas->Canvas Scaler->UI Scale Mode: Scale with Screen Size, ->Match: 0.5 \par
+Zoom out to show entire UI box. Copi InputIP from Main and Paste to Login Canvas as a component. Set InputIP >\par
+ Rect Transform Scale to 1,1,0. > Rotation 0,0,0. and position it near the middle of the screen. Delete InputIP from \par
+MainUI Canvas. Delete Awake and Start calls from SocketIOComponent. Just use Url set. Add LoadScene() call after \par
+SetIP() call. Run Login scene. hmm, ah..didn't take script with it when copied. Attach MainUI.cs script to Canvas.\par
+Fill in publics Host IP and Network. Nope. Make a new script called Login. Move it to _Scripts. Need MainUI for \par
+game UI.\par
+try static string for Url, then get it in Awake. Ok, all working again. Add call to set UI name text to ID. Ok, all works.\par
+Build a Client and test Local and Remote. Build Settings, add Login and move it above main. run..Local Client works \par
+with 127.0.0.1 and with 192.168..0.2 (my Host IP). Name Text box not showing up though..hmm..text box sizing??\par
+Z position..fixed..commit.\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+\par
+}
+ 
