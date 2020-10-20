@@ -14,3 +14,4 @@ Added a Login scene to allow a player to set the Host IP address and other param
 Mod1: Added name over character. Uses socket id as name.  
 ![alt tag](ScreenShot.jpg)  
 Mod2: Added color select radio buttons to set the name plate color.  
+Mod3: Use color select radio buttons to set the color of the avatar. (50% coded)  

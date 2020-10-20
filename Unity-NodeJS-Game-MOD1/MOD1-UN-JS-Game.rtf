@@ -159,6 +159,14 @@ Drag MainUI>Name object to Network public Text to link it. Build...start server 
 Bug Fix. Panel for radio button is not anchored correctly. Sizes with window changes.\par
 Panel_Background->Rect Transform change from stretch to middle center anchoring...fixed..\par
 TODO: Minor Bug. NamePlate color is not sent to the other Clients. Need to add it to 'spawn' message.\par
+MOD: Created new Materials for Blue, Red, and Yellow skins. Change Login to pass int for color. Change Spawner \par
+to map int to color Material..ok..works. Still need to pass color to other Clients.\par
+Plan: TODO\par
+When the Client receives a 'register' Event, it gets it's ID. When it calls AddPlayer(), it can pass it's color.\par
+For others, need to change server flow. Add 'color' message event. Wait to for this to send broadcast spawn and \par
+other messages so color can be sent with spawn messages. Server will need to add .color to player struct.\par
+Right now it sets all avatars on the Client to the Login.color.\par
+\par
 \par
 \par
 \par

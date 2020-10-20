@@ -34,6 +34,8 @@ public class Network : MonoBehaviour
         Debug.Log("conected");
     }
 
+    // TODO: Add passing Login.skinColor to AddPlayer().
+    // TODO: Add a socket.Emit('color', Login.skinColor) message to server.
     private void OnRegister(SocketIOEvent obj)
     {
         Debug.Log("registered id = " + obj.data);
@@ -42,6 +44,8 @@ public class Network : MonoBehaviour
         nameBox.text = obj.data["id"].str;
     }
 
+    // TODO: Add .color to obj message from server and pass to SpawnPlayer() which 
+    // will pass it to AddPlayer().
     private void OnSpawn(SocketIOEvent obj)
     {
 

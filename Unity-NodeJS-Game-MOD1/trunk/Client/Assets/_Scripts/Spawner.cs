@@ -15,6 +15,12 @@ public class Spawner : MonoBehaviour
 
     private GameObject namePlate;
 
+    public Material defaultColor;
+    public Material redColor;
+    public Material blueColor;
+    public Material yellowColor;
+
+    // TODO: Add color parameter to be passed to AddPlayer().
     public GameObject SpawnPlayer(string id)
     {
         var player = Instantiate(networkPlayer, Vector3.zero, Quaternion.identity) as GameObject;
@@ -29,6 +35,7 @@ public class Spawner : MonoBehaviour
         return players[id];
     }
 
+    // TODO: Add color parameter to replace Login.skinColor to support setting other avatar's color.
     public void AddPlayer(string id, GameObject player)
     {
         // Add namePlate here after instaniation.
@@ -49,7 +56,50 @@ public class Spawner : MonoBehaviour
             textMesh.text = id;     // Set the name text to the network id string.
             // Set UI name also
             // Change the color of the Avatar based on Login.skinColor.
-            textMesh.color = Login.skinColor;       // try this first. Change namePlate color. works.
+            // try this first. Change namePlate color. works.
+            switch (Login.skinColor)
+            {
+                case 0:     // default Orange
+                    textMesh.color = new Color(0.96f, 0.5f, 0.05f, 1.0f);
+                    break;
+
+                case 1:     // Blue
+                    textMesh.color = Color.blue;
+                    break;
+
+                case 2:     // Yellow
+                    textMesh.color = Color.yellow;
+                    break;
+
+                case 3:     // Red
+                    textMesh.color = Color.red;
+                    break;
+
+                default:     // default Brown
+                    textMesh.color = new Color(0.96f, 0.5f, 0.05f, 1.0f);
+                    break;
+            }
+            // Made new Materials for colors.
+            switch (Login.skinColor)
+            {
+                case 0:         // default. no change.
+                    break;
+
+                case 1:         // use Blue
+                    player.GetComponentInChildren<SkinnedMeshRenderer>().material = blueColor;
+                    break;
+
+                case 2:         // use Yellow
+                    player.GetComponentInChildren<SkinnedMeshRenderer>().material = yellowColor;
+                    break;
+
+                case 3:         // use Red
+                    player.GetComponentInChildren<SkinnedMeshRenderer>().material = redColor;
+                    break;
+
+                default:
+                    break;
+            }
         }
         // Now set the new Player object as its parent.
         namePlate.transform.parent = player.transform;

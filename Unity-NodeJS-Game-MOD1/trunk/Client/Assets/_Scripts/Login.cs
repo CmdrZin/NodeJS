@@ -8,7 +8,7 @@ public class Login : MonoBehaviour
 {
     public InputField hostIP;
     static public string IPaddr;
-    static public Color skinColor = Color.red;      // default color..treat as orange.
+    static public int skinColor = 0;      // default color..treat as orange.
 
 
     // Other InputFields can be added to set Player options like Name, Color, Avatar, etc.
@@ -42,29 +42,9 @@ public class Login : MonoBehaviour
     }
 
     // This function updates the Skin color public variable to set of the Avatar color.
+    // This is called from each CanvasUI->Panel_Background->Toggle_<color> Toggle object.
     public void SetSkinColor(int color)
     {
-        switch(color)
-        {
-            case 0:
-                skinColor = Color.red;
-                break;
-
-            case 1:
-                skinColor = Color.blue;
-                break;
-
-            case 2:
-                skinColor = Color.white;
-                break;
-
-            case 3:
-                skinColor = Color.green;
-                break;
-
-            default:
-                skinColor = Color.red;
-                break;
-        }
+        skinColor = color;
     }
 }
