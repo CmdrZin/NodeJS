@@ -3,7 +3,7 @@
 {\*\generator Riched20 10.0.19041}\viewkind4\uc1 
 \pard\sl240\slmult1\f0\fs22\lang9 MOD1-UN-JS-Game.rtf\par
 15oct20 ndp\par
-19oct20\par
+20oct20\par
 \par
 Unity NodeJS Game with Modifications\par
 \par
@@ -166,6 +166,26 @@ When the Client receives a 'register' Event, it gets it's ID. When it calls AddP
 For others, need to change server flow. Add 'color' message event. Wait to for this to send broadcast spawn and \par
 other messages so color can be sent with spawn messages. Server will need to add .color to player struct.\par
 Right now it sets all avatars on the Client to the Login.color.\par
+20oct20\par
+MOD: server.js : Add a .color component to player data struct. This have color sent with the id in the \par
+socket.emit('spawn', players[playerId]) message.\par
+MOD: server.js : Add a socket.on('color', ...) handler to record the player's color.\par
+MOD: Network : OnRegister() emit a "color" message with the Player's color setting (int).\par
+MOD: Spawner : SpawnPlayer() add an int parameter to pass color to AddPlayer() for the spawn.\par
+MOD: Spawner : AddPlayer() add int color parameter to set namePlate color and avatar texture color. Use this \par
+instead on Login.skinColor. try it. JSONObject only supports float. So need to covert to int at times. Almost works. \par
+New Client shows existing Players, but existing Clients don't get new Players. hmm..ah, left color out of the \par
+broadcast spawn message. fixed. Clients no get the color of the other Players.\par
+One improvement. Set MainUI->Name color to Player's color.\par
+MOD: Spawner : AddPlayer() to set MainUI->Name to color also. Update Network to use MainUI function.\par
+Update Spawner to use MainUI function. blah, have to set color in Network when Player registers..fix..ok, \par
+all working again. Player color sent to all other Clients and Player's color shows on Name box.\par
+\par
+\par
+\par
+\par
+\par
+\par
 \par
 \par
 \par

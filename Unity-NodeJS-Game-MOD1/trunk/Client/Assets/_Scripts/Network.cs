@@ -10,7 +10,7 @@ public class Network : MonoBehaviour
     public GameObject currentPlayer;
     public Spawner spawner;
 
-    public Text nameBox;
+    public MainUI mainUI;
 
     // Use this for initialization
     void Start()
@@ -39,18 +39,23 @@ public class Network : MonoBehaviour
     private void OnRegister(SocketIOEvent obj)
     {
         Debug.Log("registered id = " + obj.data);
-        spawner.AddPlayer(obj.data["id"].str, currentPlayer);
+        spawner.AddPlayer(obj.data["id"].str, currentPlayer, Login.skinColor);
 		currentPlayer.GetComponent<NetworkEntity> ().id = obj.data ["id"].str;
-        nameBox.text = obj.data["id"].str;
+        mainUI.SetNameBoxText(obj.data["id"].str);
+        // Set Name box to Player's color.
+        mainUI.SetNameBoxColor(GetColor(Login.skinColor));
+        // Create a JSONObject to encpsulate data.
+        JSONObject jsonObject = new JSONObject(JSONObject.Type.OBJECT);
+        jsonObject.AddField("color", Login.skinColor);
+        socket.Emit("color", jsonObject);
     }
 
     // TODO: Add .color to obj message from server and pass to SpawnPlayer() which 
     // will pass it to AddPlayer().
     private void OnSpawn(SocketIOEvent obj)
     {
-
         Debug.Log("Spawn " + obj.data);
-        var player = spawner.SpawnPlayer(obj.data["id"].str);
+        var player = spawner.SpawnPlayer(obj.data["id"].str, (int)obj.data["color"].n); // only float number type
         if (obj.data["x"])
         {
             var movePosition = GetVectorFromJson(obj);
@@ -104,7 +109,38 @@ public class Network : MonoBehaviour
         var disconnectedId = obj.data["id"].str;
         spawner.Remove(disconnectedId);
     }
-    
+
+    // Map Toggle box index values to a Color.
+    private Color GetColor(int index)
+    {
+        Color color;
+
+        switch (index)
+        {
+            case 0:     // default Orange
+                color = new Color(0.96f, 0.5f, 0.05f, 1.0f);
+                break;
+
+            case 1:     // Blue
+                color = Color.blue;
+                break;
+
+            case 2:     // Yellow
+                color = Color.yellow;
+                break;
+
+            case 3:     // Red
+                color = Color.red;
+                break;
+
+            default:     // default Brown
+                color = new Color(0.96f, 0.5f, 0.05f, 1.0f);
+                break;
+        }
+
+        return color;
+    }
+
     private static Vector3 GetVectorFromJson(SocketIOEvent obj)
     {
         return new Vector3(obj.data["x"].n, 0, obj.data["y"].n);

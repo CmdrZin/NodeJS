@@ -21,12 +21,12 @@ public class Spawner : MonoBehaviour
     public Material yellowColor;
 
     // TODO: Add color parameter to be passed to AddPlayer().
-    public GameObject SpawnPlayer(string id)
+    public GameObject SpawnPlayer(string id, int color)
     {
         var player = Instantiate(networkPlayer, Vector3.zero, Quaternion.identity) as GameObject;
         player.GetComponent<ClickToFollow>().currentPlayer = currentPlayer;
         player.GetComponent<NetworkEntity>().id = id;
-        AddPlayer(id, player);
+        AddPlayer(id, player, color);
         return player;
     }
 
@@ -36,7 +36,7 @@ public class Spawner : MonoBehaviour
     }
 
     // TODO: Add color parameter to replace Login.skinColor to support setting other avatar's color.
-    public void AddPlayer(string id, GameObject player)
+    public void AddPlayer(string id, GameObject player, int color)
     {
         // Add namePlate here after instaniation.
         namePlate = new GameObject("NamePlate");
@@ -57,7 +57,7 @@ public class Spawner : MonoBehaviour
             // Set UI name also
             // Change the color of the Avatar based on Login.skinColor.
             // try this first. Change namePlate color. works.
-            switch (Login.skinColor)
+            switch (color)
             {
                 case 0:     // default Orange
                     textMesh.color = new Color(0.96f, 0.5f, 0.05f, 1.0f);
@@ -80,7 +80,7 @@ public class Spawner : MonoBehaviour
                     break;
             }
             // Made new Materials for colors.
-            switch (Login.skinColor)
+            switch (color)
             {
                 case 0:         // default. no change.
                     break;
