@@ -12,3 +12,6 @@ to explain the modules and scripts used by the Client to aid others in enhancing
 Unity-NodeJS-Game-GUI: This folder contains a simple UI enhancement to the minimum Client.   
 
 Unity-NodeJS-Game-MOD1: This folder contains more UI enhancements and comments on the the network message flow between the Server and the Client.  
+
+NodeJS-BattleBots: This is a 'built from scratch' game that will use "NodeJS + socket.io" and "SocketIO for Unity from the Unity Asset Store" to 'network' the Roll-a-Ball tutorial game example. This plus the other four project should provide lots of examples for those who are builing their own multiplayer network game.   
+
