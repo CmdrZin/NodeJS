@@ -9,5 +9,7 @@ project is loaded. Just close Unity after it builds the Library database and reo
 Any random warnings should go away.   
    
 Phase 1: The Client connects to the Server and console log messages are shown.   
+Phase 2: Network players are spawned on local Client.
+Phase 3: TODO: Pass motion information between Clients.
 
 TODO: Complete the Roll-a-Ball game and make it multiplayer.   
