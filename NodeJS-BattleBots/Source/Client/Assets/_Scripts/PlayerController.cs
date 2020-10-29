@@ -14,16 +14,26 @@ public class PlayerController : MonoBehaviour
     private float forceX;
     private float forceY;
 
+    // change back to private after debugging.
+    public Vector3 lastPosition;
+    public Vector3 pDiff = new Vector3(0.0f, 0.0f, 0.0f);
+
+    public Network network;         // Link to Network functions.
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        lastPosition = transform.position;
     }
 
     // Physics is applied here before scene rendering. Physics go here.
     void FixedUpdate()
     {
+        //Update velocity. Units per frame.
+        pDiff = lastPosition - transform.position;
+        lastPosition = transform.position;
+
         // Convert Vector2 to Vector3 object.
         Vector3 force = new Vector3(forceX, 0.0f, forceY);
         // Apply force to object.
@@ -37,10 +47,10 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    // Return the force vector from components.
-    public Vector2 GetForce()
+    // Return the velocity vector. Units changed per frame.
+    public Vector3 GetVelocity()
     {
-        return (new Vector2(forceX, forceY));
+        return (pDiff);
     }
 
     // Called by the Player Input->Input Action Asset. Responds to WASD keys.
@@ -51,5 +61,7 @@ public class PlayerController : MonoBehaviour
         forceX = forceVector.x;
         forceY = forceVector.y;
 
+        // Send update to Server. Velocity, speed, and position.
+        network.SendUpdateMotion(pDiff, speed, transform.position);
     }
 }

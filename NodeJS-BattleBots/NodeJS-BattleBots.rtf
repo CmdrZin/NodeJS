@@ -3,7 +3,7 @@
 {\*\generator Riched20 10.0.19041}\viewkind4\uc1 
 \pard\sl240\slmult1\f0\fs22\lang9 NodeJS-BattleBots.rtf\par
 17oct20\par
-27oct20\par
+29oct20\par
 \par
 Build a simple NodeJS Server + Unity Client with basic 3D player objects.\par
 \par
@@ -121,14 +121,26 @@ player \{ \} data.\par
 1. Create an Empty GameObject (NetworkPlayerManager) and add a New C# Script to it (NetworkPlayerManager).\par
 Need a SpawnPlayer() to add Network players. The local player is already spawned. Then need an AddPlayer() to \par
 add either the local player or a network player to the Client's list of players.\par
-Don't forget to link objects to scripts..try it out..works at a spawning network players.\par
+Don't forget to link objects to scripts..try it out..works at spawning network players.\par
 TODO: RemovePlayer() on disconnect. Send force, speed, and position updates when Players make changes.\par
-\par
-\par
-\par
-\par
-\par
-\par
+2. Use 'disconnected' message that the Server broadcasts to remove a Player from the Client's player list and delete that \par
+player's avatar.\par
+MOD: NetworkPlayerManager - Add RemovePlayer()\par
+3. Add a 'updateMotion' message that contains \{id, force, speed, & position\} data.\par
+\tab Server - updates the player data and broadcasts the message to other Clients.\par
+\tab Client - updates that player's force, speed, and position data.\par
+MOD: Network: - Add SendUpdateMotion() to create a data packet.\par
+MOD: PlayerController: OnMove() to send update by calling Network.SendUpdateMotion().\par
+MOD: server.js - Add socket.on('updateMotion', ...) handler.\par
+MOD: Network: - Add OnUpdateMotion() handler and register it (Start()).\par
+MOD: Network: OnDisconnect() to call NetworkPlayerManager:RemovePlayer()..works\par
+try it..hmm..need velocity, not force..try to calculate each frame..hmm, force velocity may not work..\par
+MOD: NetworkPlayerManager: Add UpdateMotion() to set position and velocity.\par
+almost there..have to pass Y position since a 0.5 offset is used to place the sphere on the plane. Plane is x,z with y vertical.\par
+MOD: Server - add z. Use x,y,z now. Note: x is x on plane, z is y on plane. Same with velocity.\par
+MOD: Network: VectorToJson() to use x,y,z.\par
+Ok, jerky, but basically working. Spawns, Deletes, Position updates...commit..\par
+Sync needs a better plan. Could try updating 10/sec for a simple way. AI predictive maybe?. Try velocity also.\par
 \par
 \par
 \par

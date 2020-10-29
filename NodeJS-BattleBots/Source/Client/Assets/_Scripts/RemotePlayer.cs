@@ -13,8 +13,12 @@ public class RemotePlayer : MonoBehaviour
     public int color = 0;
 
     private Rigidbody rb;
-    private float forceX;
-    private float forceY;
+    private float forceX = 0.0f;
+    private float forceY = 0.0f;
+
+    // change back to private after debugging
+    public Vector3 pDiff = new Vector3(0.0f, 0.0f, 0.0f);
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,9 +36,8 @@ public class RemotePlayer : MonoBehaviour
     }
 
     // Called by Network to update the Remote Player's force changes.
-    public void SetForce(Vector2 forceValue)
+    public void SetVelocity(Vector3 velocity)
     {
-        forceX = forceValue.x;
-        forceY = forceValue.y;
+        pDiff = velocity;
     }
 }

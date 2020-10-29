@@ -312,6 +312,7 @@ MonoBehaviour:
   speed: 10
   id: 
   color: 0
+  network: {fileID: 35583287}
 --- !u!114 &605478072
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -55,10 +55,10 @@ io.on('connection', function (socket) {
         id: thisPlayerID,
         color: 0,
         position: {
-            x: 0, y: 0
+            x: 0, y: 0, z: 0
         },
-        force: {
-            x: 0, y: 0
+        velocity: {
+            x: 0, y: 0, z:0
         },
         speed: 0,
         lastMoveTime: 0
@@ -98,50 +98,68 @@ io.on('connection', function (socket) {
      * Player moving {"c":{"x":0,"y":0},"d":{"x":3.77125,"y":4.337967},"id":"ByWJcI5DD"}
      * Player moved {"id":"ByWJcI5DD","x":3.77125,"y":4.337967}
      */
-    socket.on('move', function (data) {
-        data.id = thisPlayerID;
-        console.log('Player moving', JSON.stringify(data));
-        /* DEBUG CODE
-         console.log('socket ', socket.id);  // shows that each socket has it's own io.on().
-         */
+//    socket.on('move', function (data) {
+//        data.id = thisPlayerID;
+//        console.log('Player moving', JSON.stringify(data));
+//        /* DEBUG CODE
+//         console.log('socket ', socket.id);  // shows that each socket has it's own io.on().
+//         */
+//
+//        // Update to their new position. This could be used later to check valid moves.
+//        player.position.x = data.d.x;
+//        player.position.y = data.d.y;
+//
+//        delete data.c;       // remove from JSON object to reduce packet size.
+//
+//        // These add and objects to the JSONObject by their declaration.
+//        data.x = data.d.x;
+//        data.y = data.d.y;
+//
+//        delete data.d;       // remove from JSON object to reduce packet size.
+//
+//        // Tell everyone to update there position information for this player.
+//        // The Clients will correctly parse this data since they expect id, x, y 
+//        // components. (see Network:OnMove())
+//        socket.broadcast.emit('move', data);
+//        // Note the different data structure in the printout.
+//        console.log('Player moved', JSON.stringify(data));
+//    });
 
-        // Update to their new position. This could be used later to check valid moves.
-        player.position.x = data.d.x;
-        player.position.y = data.d.y;
-
-        delete data.c;       // remove from JSON object to reduce packet size.
-
-        // These add and objects to the JSONObject by their declaration.
-        data.x = data.d.x;
-        data.y = data.d.y;
-
-        delete data.d;       // remove from JSON object to reduce packet size.
-
-        // Tell everyone to update there position information for this player.
-        // The Clients will correctly parse this data since they expect id, x, y 
-        // components. (see Network:OnMove())
-        socket.broadcast.emit('move', data);
-        // Note the different data structure in the printout.
-        console.log('Player moved', JSON.stringify(data));
+    // The data packet contains {id, force, speed, & position} data.
+    socket.on('updateMotion', function (data) {
+        console.log("Updating Motion: ", JSON.stringify(data));
+        // thisPlayerID is set due to it being this socket.
+        player.position.x = data.p.x;       // x on plane
+        player.position.y = data.p.y;
+        player.position.z = data.p.z;       // y on plane
+        player.speed = data.speed;
+        player.velocity.x = data.v.x;
+        player.velocity.y = data.v.y;
+        player.velocity.z = data.v.z;
+        
+        // Just pass the data along.
+        socket.broadcast.emit('updateMotion', (data));
     });
 
     // The data packet only contains the position. The Player ID has to be added. 
     // before sending it to all Clients.
     socket.on('updatePosition', function (data) {
-        console.log("Update Position: ", data);
+        console.log("Update Position: ", JSON.stringify(data));
         data.id = thisPlayerID;
-        socket.broadcast.emit('updatePosition', data);
+        socket.broadcast.emit('updatePosition', (data));
     });
 
     // The data packet contains Player data. 
     socket.on('newPlayerData', function (data) {
-        console.log("Update New Player data: ", data);
+        console.log("Update New Player data: ", JSON.stringify(data));
         players[thisPlayerID].color = data.color;
-        players[thisPlayerID].position.x = data.position.x;
-        players[thisPlayerID].position.y = data.position.y;
-        players[thisPlayerID].force.x = data.force.x;
-        players[thisPlayerID].force.y = data.force.y;
+        players[thisPlayerID].position.x = data.p.x;    // x on plane
+        players[thisPlayerID].position.y = data.p.y;
+        players[thisPlayerID].position.z = data.p.z;    // y on plane
         players[thisPlayerID].speed = data.speed;
+        players[thisPlayerID].velocity.x = data.v.x;
+        players[thisPlayerID].velocity.y = data.v.y;
+        players[thisPlayerID].velocity.z = data.v.z;
 
         // Finish the new player process.
         console.log("Everyone spawn ", thisPlayerID);
