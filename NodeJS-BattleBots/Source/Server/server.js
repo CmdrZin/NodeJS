@@ -143,8 +143,10 @@ io.on('connection', function (socket) {
 
     // The data packet only contains the position. The Player ID has to be added. 
     // before sending it to all Clients.
+    // From Client: {"p":{"x":-4.417422,"y":0.5,"z":-2.225055}}
+    // To Client: {"p":{"x":-4.417422,"y":0.5,"z":-2.225055},"id":"z2a5yFdy8I"}
     socket.on('updatePosition', function (data) {
-        console.log("Update Position: ", JSON.stringify(data));
+//        console.log("Update Position: ", JSON.stringify(data));
         data.id = thisPlayerID;
         socket.broadcast.emit('updatePosition', (data));
     });

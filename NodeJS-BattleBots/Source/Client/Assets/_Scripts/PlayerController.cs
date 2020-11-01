@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
 
     public Network network;         // Link to Network functions.
 
+    private int frames;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +35,12 @@ public class PlayerController : MonoBehaviour
         //Update velocity. Units per frame.
         pDiff = lastPosition - transform.position;
         lastPosition = transform.position;
+
+        // Send an update every N frames.
+        if (Time.frameCount % 2 == 0)
+        {
+            network.SendUpdatePosition(transform.position);
+        }
 
         // Convert Vector2 to Vector3 object.
         Vector3 force = new Vector3(forceX, 0.0f, forceY);
@@ -62,6 +70,6 @@ public class PlayerController : MonoBehaviour
         forceY = forceVector.y;
 
         // Send update to Server. Velocity, speed, and position.
-        network.SendUpdateMotion(pDiff, speed, transform.position);
+//        network.SendUpdateMotion(pDiff, speed, transform.position);
     }
 }

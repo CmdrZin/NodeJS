@@ -54,4 +54,12 @@ public class NetworkPlayerManager : MonoBehaviour
         remotePlayer.transform.position = newPosition;
     }
 
+    // Update the Network Player's avatar position on this Client.
+    // The data packet uses the Client player data package structure.
+    public void UpdatePosition(SocketIOEvent obj)
+    {
+        GameObject remotePlayer = players[obj.data["id"].str];
+        Vector3 newPosition = new Vector3(obj.data["p"]["x"].n, obj.data["p"]["y"].n, obj.data["p"]["z"].n);
+        remotePlayer.transform.position = newPosition;
+    }
 }

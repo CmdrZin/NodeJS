@@ -73,7 +73,8 @@ public class Network : MonoBehaviour
 
     private void OnUpdatePosition(SocketIOEvent obj)
     {
-        Debug.Log("update position " + obj.data);
+//        Debug.Log("update position " + obj.data);
+        networkPlayerManager.UpdatePosition(obj);
     }
 
     private void OnRequestPosition(SocketIOEvent obj)
@@ -97,6 +98,15 @@ public class Network : MonoBehaviour
         jsonObject.AddField("p", VectorToJson(position));
 
         socket.Emit("updateMotion", jsonObject);
+    }
+
+    // Create a data packet for updatePosition message.
+    public void SendUpdatePosition(Vector3 position)
+    {
+        JSONObject jsonObject = new JSONObject(JSONObject.Type.OBJECT);
+        jsonObject.AddField("p", VectorToJson(position));
+
+        socket.Emit("updatePosition", jsonObject);
     }
 
     public static JSONObject VectorToJson(Vector3 vector)

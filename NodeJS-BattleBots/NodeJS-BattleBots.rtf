@@ -3,7 +3,7 @@
 {\*\generator Riched20 10.0.19041}\viewkind4\uc1 
 \pard\sl240\slmult1\f0\fs22\lang9 NodeJS-BattleBots.rtf\par
 17oct20\par
-29oct20\par
+31oct20\par
 \par
 Build a simple NodeJS Server + Unity Client with basic 3D player objects.\par
 \par
@@ -141,8 +141,15 @@ MOD: Server - add z. Use x,y,z now. Note: x is x on plane, z is y on plane. Same
 MOD: Network: VectorToJson() to use x,y,z.\par
 Ok, jerky, but basically working. Spawns, Deletes, Position updates...commit..\par
 Sync needs a better plan. Could try updating 10/sec for a simple way. AI predictive maybe?. Try velocity also.\par
-\par
-\par
+Adding an every 5 frames position sync.\par
+Make an 'updatePosition' message. Client -> Server: position. Server -> Clients: id, position. The Server adds the \par
+Player's id to the message that it broadcasts to the other Clients. Minor reduction in message size from the Client.\par
+MOD: PlayerController.cs: Start() to send update every N frames.\par
+MOD: Network.cs: Add SendUpdatePosition() - builds an 'updatePosiiton' message.\par
+MOD: server.js: Already has updatePosition handler.\par
+MOD: Network.cs: OnUpdatePosition() - call NetworkPlayerManager to update player's position.\par
+try it..reduce to update everyother frame..remote Clients farely smooth, Unity Client still choppy. Try AI next.\par
+commit..\par
 \par
 \par
 \par
@@ -185,9 +192,6 @@ Add a public GameObject player to the Network.cs script to link network operatio
 Player object to this link.\par
 Add a public SocketIOComponent socket to PlayerController.cs to link Player operations to the network.\par
 Drag the Network object to this link.\par
-\par
-\par
-\par
 \par
 }
  
